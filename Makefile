@@ -4,8 +4,8 @@ M = $(shell printf "\033[34;1m▶\033[0m")
 ### MAIN FUNCTIONS ###
 ######################
 
-.PHONY: release_push_github
-release_push_github: ## Creating a new tag and release on github
+.PHONY: build_github_release
+build_github_release: ## Creating a new tag and release on github
 ifndef REPOSITORY
 	$(error REPOSITORY is not set !(Use "export REPOSITORY=..."). You must specify the repository/app path (Ex: martinraynov/gh_release_generator).)
 endif
