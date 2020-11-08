@@ -6,17 +6,17 @@ M = $(shell printf "\033[34;1m▶\033[0m")
 
 .PHONY: release_push_github
 release_push_github: ## Creating a new tag and release on github
-ifndef REPOSITORY_URL
-	$(error REPOSITORY_URL is not set !(Use "export REPOSITORY_URL=...") )
+ifndef REPOSITORY
+	$(error REPOSITORY is not set !(Use "export REPOSITORY=..."). You must specify the repository/app path (Ex: martinraynov/gh_release_generator).)
 endif
 ifndef VERSION
-	$(error VERSION is not set !(Use "export VERSION=...") )
+	$(error VERSION is not set !(Use "export VERSION=..."). You must specify the version of the release you are creating.)
 endif
 ifndef GITHUB_TOKEN
-	$(error GITHUB_TOKEN is not set !(Use "export GITHUB_TOKEN=...") )
+	$(error GITHUB_TOKEN is not set !(Use "export GITHUB_TOKEN=..."). You must specifiy the access_token to your repo.)
 endif
 
-	$(info $(M) Create new tag and release for github : Repository : $(REPOSITORY_URL) , Version $(VERSION))
+	$(info $(M) Create new tag and release for github : Repository : $(REPOSITORY) , Version $(VERSION))
 
 	VERSION="$(VERSION)" GITHUB_TOKEN="$(GITHUB_TOKEN)" ./build_github_release.sh
 
