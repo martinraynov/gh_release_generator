@@ -25,10 +25,11 @@ release()
     # Create new tag
     echo "Creation of tag for version ${VERSION}"
     git tag -a ${VERSION} -m "$description"
+    git push --follow-tags
 
     # Create new release
     release=$(curl -XPOST -s -H "Authorization:token ${GITHUB_TOKEN}" \
-        --data "{\"tag_name\": \"${VERSION}\", \"target_commitish\": \"master\", \"name\": \"version ${VERSION}\", \"body\": \"${description}\", \"draft\": false, \"prerelease\": false}" \
+        --data "{\"tag_name\": \"${VERSION}\", \"name\": \"version ${VERSION}\", \"body\": \"${description}\", \"draft\": false, \"prerelease\": false}" \
         https://api.github.com/repos/${REPOSITORY}/releases)
 
     # Extract the id of the release from the creation response
@@ -41,6 +42,7 @@ release()
         
         echo "[ERROR] Deleting created tag (${VERSION})"
         git tag -d ${VERSION}
+        git push --follow-tags
         exit 1;
     fi
 
