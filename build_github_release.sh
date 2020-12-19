@@ -47,7 +47,40 @@ release()
     fi
 
     echo "Release ${release_id} created !"
+
+    # Upload the assets
+    echo "Upload the assets from upload folder"
+    for f in upload/*; do
+        assetsUpload "${release_id}" "${f}"
+    done
+
 }
+
+assetsUpload()
+{
+    release_id=$1
+    asset_path=$2
+    asset_name=$(echo $f | sed 's/^upload\///g');
+
+    echo "Upload : ${asset_name}"
+    result=$(curl -XPOST -H "Authorization:token ${GITHUB_TOKEN}" \
+        -H "Content-Type:application/binary" \
+        --data-binary @${asset_path} \
+        https://uploads.github.com/repos/CanalTP/hofundapi/releases/${release_id}/assets?name=${asset_name})
+
+    if [ -z ${result} ]; then
+        echo "[ERROR] Upload asset ${asset_path} \nResult : ${result}"
+
+        echo "[ERROR] Deleting created tag (${VERSION})"
+        git tag -d ${VERSION}
+
+        echo "[ERROR] Deleting created release (version ${VERSION})"
+        curl -XDELETE -s -H "Authorization:token ${GITHUB_TOKEN}" \
+            https://api.github.com/repos/CanalTP/hofundapi/releases/${release_id}
+
+    fi
+}
+
 ###################################################################
 
 ############################## MAIN ###############################
