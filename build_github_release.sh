@@ -42,7 +42,7 @@ release()
         
         echo "[ERROR] Deleting created tag (${VERSION})"
         git tag -d ${VERSION}
-        git push --follow-tags
+        git push origin :refs/tags/${VERSION}
         exit 1;
     fi
 
@@ -66,7 +66,7 @@ assetsUpload()
     result=$(curl -XPOST -H "Authorization:token ${GITHUB_TOKEN}" \
         -H "Content-Type:application/binary" \
         --data-binary @${asset_path} \
-        https://uploads.github.com/repos/CanalTP/hofundapi/releases/${release_id}/assets?name=${asset_name})
+        https://uploads.github.com/repos/${REPOSITORY}/releases/${release_id}/assets?name=${asset_name})
 
     if [ -z ${result} ]; then
         echo "[ERROR] Upload asset ${asset_path} \nResult : ${result}"
@@ -76,7 +76,7 @@ assetsUpload()
 
         echo "[ERROR] Deleting created release (version ${VERSION})"
         curl -XDELETE -s -H "Authorization:token ${GITHUB_TOKEN}" \
-            https://api.github.com/repos/CanalTP/hofundapi/releases/${release_id}
+            https://api.github.com/repos/${REPOSITORY}/releases/${release_id}
 
     fi
 }
