@@ -1,0 +1,32 @@
+pipeline {
+  agent any
+  options {
+    ansiColor('xterm')
+    buildDiscarder(logRotator(numToKeepStr:'10'))
+    disableConcurrentBuilds()
+  }
+  parameters {
+    string(name: 'VERSION', defaultValue: '0.0.0', description: 'Version of the release.')
+    string(name: 'REPOSITORY', defaultValue: 'martinraynov/gh_release_generator', description: 'Repository path.')
+  }
+  stages {
+    stage ('Create Github Release') {
+      environment {
+        CREDENTIALS = "${params.CREDENTIALS}"
+        VERSION = "${params.VERSION}"
+      }
+      steps {
+        withCredentials([string(credentialsId: "${CREDENTIALS}", variable: 'TOKEN')]) {
+          sh '''
+          REPOSITORY=${REPOSITORY} VERSION=${VERSION} GITHUB_TOKEN=${TOKEN} make build_github_release
+          '''
+        }
+      }
+    }
+  }
+  post {
+    always {
+      deleteDir()
+    }
+  }
+}
