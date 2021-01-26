@@ -7,7 +7,7 @@ pipeline {
   }
   parameters {
     string(name: 'VERSION', defaultValue: '0.0.0', description: 'Version of the release.')
-    string(name: 'REPOSITORY', defaultValue: 'martinraynov/gh_release_generator', description: 'Repository path.')
+    string(name: 'REPOSITORY', defaultValue: 'martinraynov/github-release-generator', description: 'Repository path.')
   }
   stages {
     stage ('Create Github Release') {
