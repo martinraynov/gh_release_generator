@@ -3,6 +3,7 @@
 
 ### 0.0.3
 * Test Jenkinsfile
+* Presentation of the script
 
 ### 0.0.2
 * Add assets upload
