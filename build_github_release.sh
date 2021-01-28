@@ -77,7 +77,8 @@ assetsUpload()
         echo "[ERROR] Deleting created release (version ${VERSION})"
         curl -XDELETE -s -H "Authorization:token ${GITHUB_TOKEN}" \
             https://api.github.com/repos/${REPOSITORY}/releases/${release_id}
-
+        
+        exit 1;
     fi
 }
 
